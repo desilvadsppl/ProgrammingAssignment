@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Build and Test
 
 on:
   push:
@@ -8,23 +8,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
-    
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
-    
-    - name: Install dependencies
-      run: pip install fastapi uvicorn scikit-learn
-    
-    - name: Test FastAPI app
-      run: uvicorn main:app --host 0.0.0.0 --port 8000 --no-access-log & sleep 5; curl -X POST "http://0.0.0.0:8000/predict/" -H "Content-Type: application/json" -d '{"sepal_length": 5.1, "sepal_width": 3.5, "petal_length": 1.4, "petal_width": 0.2}'
+      uses: actions/checkout@v3
 
-    - name: Deploy to Railway
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
       run: |
-        curl -sL https://railway.app | bash
-        railway up
+        pip install -r requirements.txt
+
+    - name: Run tests
+      run: |
+        pytest
