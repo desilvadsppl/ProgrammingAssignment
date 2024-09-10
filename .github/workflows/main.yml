@@ -35,6 +35,10 @@ jobs:
           which python
           which pip
 
+      - name: Check pytest Installation
+        run: |
+          pip show pytest
+
       - name: Run tests
         run: |
           pytest
