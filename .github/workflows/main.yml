@@ -1,15 +1,14 @@
 name: CI/CD Pipeline
 
+name: Build and Test
+
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,11 +18,15 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
+        python-version: '3.9'  # Ensure this matches the Python version
 
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
+
+    - name: Install pytest manually
+      run: |
+        pip install pytest
 
     - name: List installed packages
       run: |
