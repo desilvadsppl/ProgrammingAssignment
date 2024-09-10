@@ -1,27 +1,27 @@
-name: Build and Test
+name: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-
-    - name: Run tests
-      run: |
-        pytest
+      - uses: actions/checkout@v2
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
+          
+      - name: Install Railway CLI
+        run: |
+          bash <(curl -fsSL cli.new)
+               
+      - name: Deploy to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway up --service Fruit_Predict_API
