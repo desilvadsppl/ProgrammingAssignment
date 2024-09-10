@@ -24,4 +24,5 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway up --service Fruit_Predict_API
+          railway login --token $RAILWAY_TOKEN
+          railway up --project ${{ secrets.RAILWAY_PROJECT_ID }}
